@@ -46,7 +46,7 @@ Future<void> main() async {
             channelDescription: channel.description,
             // TODO add a proper drawable resource to android, for now using
             //      one that already exists in example app.
-            icon: 'ic_stat_drafts',
+            icon: 'launch_background',
             color: Colors.green,
             colorized: true,
           ),

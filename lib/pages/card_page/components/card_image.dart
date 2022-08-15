@@ -10,6 +10,7 @@ class CardImage extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(
         minHeight: 200,
+        minWidth: 200,
         maxHeight: 300,
         maxWidth: 200,
       ),

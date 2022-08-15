@@ -22,6 +22,9 @@ class TileList extends StatelessWidget {
           personagemBean.nome,
           style: TextStyle(fontSize: 20),
         ),
+        trailing: Text(
+          personagemBean.classe,
+        ),
         onTap: () {
           Navigator.push(
             context,

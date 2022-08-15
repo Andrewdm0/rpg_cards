@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:rpg_cards/main.dart';
@@ -9,6 +10,7 @@ import '../card_page/components/tile_list.dart';
 
 class HomePage extends StatelessWidget {
   FirebaseFirestore db = FirebaseFirestore.instance;
+  final storage = FirebaseStorage.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +43,16 @@ class HomePage extends StatelessWidget {
                       personagens.forEach((element) {
                         lista_personagens.add(
                           PersonagemBean(
-                            nome: element['nome'],
-                            classe: element['classe'],
-                            arma: element['arma'],
-                            ataque: element['ataque'],
-                            image: element['image'],
-                            id: element.id,
-                            dado: (element['dado'] == null? '0': element['dado'])
-                          ),
+                              nome: element['nome'],
+                              classe: element['classe'],
+                              arma: element['arma'],
+                              ataque: element['ataque'],
+                              image: element['image'],
+                              imageref: element['imageRef'],
+                              id: element.id,
+                              dado: (element['dado'] == null
+                                  ? '0'
+                                  : element['dado'])),
                         );
                       });
 
@@ -65,7 +69,15 @@ class HomePage extends StatelessWidget {
                                 children: [
                                   SlidableAction(
                                     onPressed: (value) {
-                                      db.collection('characters').doc(personagens[index].id).delete();
+                                      db
+                                          .collection('characters')
+                                          .doc(personagens[index].id)
+                                          .delete();
+                                      FirebaseStorage.instance
+                                          .ref()
+                                          .child(
+                                              lista_personagens[index].imageref)
+                                          .delete();
                                     },
                                     backgroundColor: Colors.redAccent,
                                     icon: Icons.delete,

@@ -3,5 +3,5 @@ import 'dart:math';
 final randomGenerator = Random();
 
 int getRandomNumber(){
-  return randomGenerator.nextInt(20);
+  return randomGenerator.nextInt(20) + 1;
 }

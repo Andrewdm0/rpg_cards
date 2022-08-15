@@ -1,5 +1,5 @@
 class PersonagemBean {
-  final String id,dado, nome, classe, arma, ataque, image;
+  final String id,dado, nome, classe, arma, ataque, image, imageref;
 
   PersonagemBean({
     required this.id,
@@ -9,5 +9,6 @@ class PersonagemBean {
     required this.arma,
     required this.ataque,
     required this.image,
+    required this.imageref,
   });
 }

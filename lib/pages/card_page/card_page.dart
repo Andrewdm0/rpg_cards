@@ -35,9 +35,7 @@ class _CardPageState extends State<CardPage> {
   void rollDice() {
     setState(() {
       var random = getRandomNumber();
-      if (random != 0) {
-        numero = random;
-      }
+      numero = random;
     });
     db
         .collection('characters')
