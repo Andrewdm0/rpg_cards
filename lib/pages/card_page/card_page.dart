@@ -71,7 +71,7 @@ class _CardPageState extends State<CardPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CharStatus(imageUrl: widget.personagemBean.image),
+                  CharStatus(imageUrl: widget.personagemBean.image, personagemBean: widget.personagemBean),
                   SizedBox(height: 20),
                   CardColumn(personagemBean: widget.personagemBean),
                   Container(

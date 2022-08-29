@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:rpg_cards/main.dart';
+import 'package:rpg_cards/models/personagem_bean.dart';
+import 'package:rpg_cards/pages/edit_page/edit_page.dart';
 
 import 'card_image.dart';
 
 class CharStatus extends StatefulWidget {
-  CharStatus({Key? key, required this.imageUrl}) : super(key: key);
+  CharStatus({required this.imageUrl, required this.personagemBean});
   String imageUrl;
+  PersonagemBean personagemBean;
 
   @override
   State<CharStatus> createState() => _CharStatusState();
@@ -49,6 +54,35 @@ class _CharStatusState extends State<CharStatus> {
           ),
         ),
         CardImage(url: widget.imageUrl),
+        Container(
+          height: 200,
+          child: Align(
+            child: GestureDetector(
+              child: Icon(
+                Icons.edit,
+                shadows: [
+                  Shadow(
+                    color: Colors.grey[500]!,
+                    blurRadius: 0.5,
+                    offset: Offset(1, 1),
+                  )
+                ],
+              ),
+              onTap: () {
+                print(widget.personagemBean);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return EditPage(personagemBean: widget.personagemBean);
+                    },
+                  ),
+                ).then((value) => setState((){}));
+              },
+            ),
+            alignment: Alignment.topCenter,
+          ),
+        )
       ],
     );
   }
