@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:rpg_cards/pages/login_page/login_page.dart';
 import 'models/personagem_bean.dart';
 import 'pages/home_page/home_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,14 +11,12 @@ List personagens = [];
 PersonagemBean? personagemBean;
 
 Future<void> main() async {
-
   //Inicializando o Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   //Increvendo o usuario no tópico geral "All"
   FirebaseMessaging.instance.subscribeToTopic("all");
   runApp(MyApp());
-
 
   late AndroidNotificationChannel channel;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -63,10 +63,21 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  User? _currentUser;
+  void initState() {
+    super.initState();
+
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      setState(() {
+        _currentUser = user;
+      });
+    });
+  }
+
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: _currentUser != null ? HomePage(_currentUser) : LoginPage(),
       theme: ThemeData(
         primarySwatch: Colors.green,
         elevatedButtonTheme: ElevatedButtonThemeData(
