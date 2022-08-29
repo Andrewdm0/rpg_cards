@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rpg_cards/helpers/pickUploadImage.dart';
 import 'package:rpg_cards/models/personagem_bean.dart';
 import 'package:rpg_cards/pages/add_page/components/add_text_field.dart';
 import 'package:rpg_cards/pages/add_page/components/botao_drop_down.dart';
@@ -31,37 +32,13 @@ class _AddPageState extends State<AddPage> {
 
   Widget widgetPhoto = Icon(Icons.image);
 
-  String imageUrl = '';
-
-  String imageRef = '';
+  Map imageData = {};
 
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   setClasseDropdownText(String value) {
     setState(() {
       classeDropdowntext = value;
-    });
-  }
-
-  void pickUploadImage() async {
-    final image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 512,
-      maxHeight: 512,
-      imageQuality: 75,
-    );
-
-    Reference ref = FirebaseStorage.instance
-        .ref()
-        .child(DateTime.now().millisecondsSinceEpoch.toString() + "image.jpg");
-
-    await ref.putFile(File(image!.path));
-    ref.getDownloadURL().then((value) {
-      imageUrl = value;
-      imageRef = ref.fullPath;
-      setState(() {
-        widgetPhoto = Image.network(imageUrl, fit: BoxFit.cover);
-      });
     });
   }
 
@@ -93,7 +70,12 @@ class _AddPageState extends State<AddPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () => pickUploadImage(),
+                    onTap: () async {
+                      imageData = await pickUploadImage('');
+                      widgetPhoto = imageData['widgetPhoto'];
+                      print('AQUI TA OS DADOS DA IMAGE DATA $imageData');
+                      setState(() {});
+                    },
                     child: Container(
                       width: 180,
                       height: 180,
@@ -134,12 +116,16 @@ class _AddPageState extends State<AddPage> {
                   ElevatedButton(
                       onPressed: () {
                         Map<String, dynamic> personagem = {
-                          'image': imageUrl == ''
+                          'image': imageData['imageUrl'] == null
                               ? 'http://1.bp.blogspot.com/-3rQ8tv7qbno/VNzzO2HyEII/AAAAAAAAAJI/7LrSFFanmys/s1600/colocando%2Bavatar%2Bem%2Bcomentarios%2Banonimos.jpg'
-                              : imageUrl,
-                          'imageRef': imageRef,
+                              : imageData['imageUrl'],
+                          'imageRef': imageData['imageRef'] == null
+                              ? ''
+                              : imageData['imageRef'],
                           'nome': nomeController.text,
-                          'classe': classeDropdowntext,
+                          'classe': classeDropdowntext == null
+                              ? 'Mago'
+                              : classeDropdowntext,
                           'arma': armaController.text,
                           'ataque': ataqueController.text,
                           'userUid': widget.currentUser!.uid,
@@ -148,7 +134,7 @@ class _AddPageState extends State<AddPage> {
                         db.collection("characters").add(personagem);
                         Navigator.pop(context);
                       },
-                      child: const Text('Criar'))
+                      child: const Text('Criar')),
                 ],
               ),
             ),
