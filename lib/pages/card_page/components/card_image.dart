@@ -20,7 +20,12 @@ class CardImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10), // Image border
         child: SizedBox.fromSize(
-          child: Image.network(url, fit: BoxFit.cover),
+          child: FadeInImage.assetNetwork(
+            placeholder: 'lib/assets/gif_loading.gif',
+            image: url,
+            fit: BoxFit.fitWidth,
+            height: 250,
+          ),
         ),
       ),
     );

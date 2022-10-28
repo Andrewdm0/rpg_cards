@@ -66,7 +66,7 @@ class _EditPageState extends State<EditPage> {
                     child: CardImage(url: imageUrl),
                     onTap: () async {
                       imageData =
-                          await pickUploadImage(widget.personagemBean.imageref);
+                          await pickUploadImage(widget.personagemBean.imageref,widget.personagemBean.id, context);
                         imageUrl = imageData['imageUrl'];
                         imageRef = imageData['imageRef'];
                       setState(() {
@@ -98,14 +98,6 @@ class _EditPageState extends State<EditPage> {
                               .collection('characters')
                               .doc(widget.personagemBean.id)
                               .update({'arma': '${armaTextController.text}'});
-                          db
-                              .collection('characters')
-                              .doc(widget.personagemBean.id)
-                              .update({'imageRef': '${imageRef}'});
-                          db
-                              .collection('characters')
-                              .doc(widget.personagemBean.id)
-                              .update({'image': '${imageUrl}'});
 
                           Navigator.pop(context);
                         },

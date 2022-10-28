@@ -71,7 +71,7 @@ class _AddPageState extends State<AddPage> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      imageData = await pickUploadImage('');
+                      imageData = await pickUploadImage('',null, context);
                       widgetPhoto = imageData['widgetPhoto'];
                       print('AQUI TA OS DADOS DA IMAGE DATA $imageData');
                       setState(() {});

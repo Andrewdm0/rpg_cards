@@ -48,6 +48,7 @@ dependencies:
   flutter_signin_button: ^2.0.0
   font_awesome_flutter: ^9.2.0
   google_sign_in: ^5.4.1
+  image_cropper: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +66,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - lib/assets/gif_loading.gif
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

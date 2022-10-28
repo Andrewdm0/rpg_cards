@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:rpg_cards/helpers/random_generator.dart';
 import 'package:rpg_cards/main.dart';
 import 'package:rpg_cards/pages/card_page/components/char_status.dart';
+import 'package:rpg_cards/pages/card_page/components/dice_box.dart';
 import '../../helpers/send_push.dart';
 import '../../models/personagem_bean.dart';
 import 'components/card_column.dart';
@@ -24,6 +25,8 @@ class CardPage extends StatefulWidget {
 class _CardPageState extends State<CardPage> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   var numero;
+  int diceSize = 20;
+  int id = 2;
 
   @override
   void initState() {
@@ -32,9 +35,23 @@ class _CardPageState extends State<CardPage> {
     numero = widget.personagemBean.dado;
   }
 
-  void rollDice() {
+  void changeSize(id){
+    switch (id) {
+      case 0:
+        diceSize = 3;
+        break;
+      case 1:
+        diceSize = 6;
+        break;
+      case 2:
+        diceSize = 20;
+        break;
+    }
+  }
+
+  rollDice() {
     setState(() {
-      var random = getRandomNumber();
+      var random = getRandomNumber(diceSize);
       numero = random;
     });
     db
@@ -91,6 +108,14 @@ class _CardPageState extends State<CardPage> {
                         fontSize: 40,
                       ),
                     ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      DiceBox(text: 'd3',setChangeSize: changeSize,id: 0,),
+                      DiceBox(text: 'd6',setChangeSize: changeSize,id: 1,),
+                      DiceBox(text: 'd20',setChangeSize: changeSize,id: 2,),
+                    ],
                   ),
                   ElevatedButton(
                     onPressed: rollDice,
